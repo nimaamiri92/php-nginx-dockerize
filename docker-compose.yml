@@ -12,7 +12,7 @@ services:
     expose:
       - "80"
     ports:
-      - 80:80
+      - 8010:80
     restart: always
     depends_on:
       - php
@@ -24,7 +24,7 @@ services:
     expose:
       - "9000"
     volumes:
-      - ./:/var/www/html/
+      - ./bccNew:/var/www/html/
     ## --------------------------------------------
     ## | 4 : database server
     ## --------------------------------------------
@@ -39,7 +39,7 @@ services:
     expose:
       - "3306"
     ports:
-      - "3306:3306"
+      - "3340:3306"
     volumes:
       - "./data/db/mysql:/var/lib/mysql"
       - ./vol-share/:/v-share/

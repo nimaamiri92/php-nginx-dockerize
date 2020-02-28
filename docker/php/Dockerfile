@@ -25,6 +25,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     && docker-php-ext-install -j$(nproc) pdo pdo_mysql bcmath zip pcntl gd soap
 
+#Add npm and nodejs
+RUN curl -sL https://deb.nodesource.com/setup_8.x |  bash - && apt-get install -y build-essential nodejs
 
 # Installing composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
