@@ -41,7 +41,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./data/db/mysql:/var/lib/mysql"
+      - "./docker/mysql/data/:/var/lib/mysql"
       - ./vol-share/:/v-share/
 
 
