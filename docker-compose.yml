@@ -45,4 +45,40 @@ services:
       - ./vol-share/:/v-share/
 
 
+  ## --------------------------------------------
+  ## | 8 : cache server
+  ## --------------------------------------------
+  redis:
+    image: redis:4.0.10-alpine
+    expose:
+      - "6379"
+    volumes:
+      - ./redis/default.conf:/usr/local/etc/redis/redis.conf
+    command: [
+      "sh", "-c",
+      '
+       docker-entrypoint.sh
+       --requirepass "12sjb12"
+      '
+    ]
+    ports:
+    - 6379:6379
+
+    ## --------------------------------------------
+    ## | 5 : PhpMyAdmin
+    ## --------------------------------------------
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysqldb
+    expose:
+      - '80'
+      - '443'
+    environment:
+      - PMA_HOST=mysqldb
+    volumes:
+      - /sessions
+    ports:
+    - 8006:80
+
 
