@@ -1,6 +1,5 @@
 FROM php:7.2.8-fpm
 
-LABEL maintainer="majid8911303@gmail"
 
 ARG WWW_DATA_USER_ID
 ARG NEWRELIC_ENABLED
