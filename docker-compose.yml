@@ -1,6 +1,5 @@
 version: '3'
 
-
 services:
   nginx:
     build:
@@ -8,14 +7,16 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./:/var/www/html
+      - ./src/${PROJECT_DIRECTORY_NAME}:/var/www/html
     expose:
       - "80"
     ports:
-      - 80:80
+      - ${NGINX_PORT}:80
     restart: always
     depends_on:
       - php
+    env_file:
+      - .env
   php:
     build:
       context: ./docker/php
@@ -24,7 +25,9 @@ services:
     expose:
       - "9000"
     volumes:
-      - ./:/var/www/html/
+      - ./src/${PROJECT_DIRECTORY_NAME}:/var/www/html
+    env_file:
+      - .env
     ## --------------------------------------------
     ## | 4 : database server
     ## --------------------------------------------
@@ -32,18 +35,17 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      - MYSQL_DATABASE=bccstyle
-      - MYSQL_ROOT_PASSWORD=123123
-      - MYSQL_USER=nima
-      - MYSQL_PASSWORD=123123
+      - MYSQL_DATABASE=${PROJECT_DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${PROJECT_DATABASE_ROOT_PASSWORD}
     expose:
       - "3306"
     ports:
-      - "3306:3306"
+      - ${MYSQL_PORT}:3306
     volumes:
-      - "./docker/mysql/data/:/var/lib/mysql"
-      - ./vol-share/:/v-share/
-
+      - ./docker/mysql/data/:/var/lib/mysql
+      - ./host-vol-share/:/v-share/
+    env_file:
+      - .env
 
   ## --------------------------------------------
   ## | 8 : cache server
@@ -54,16 +56,10 @@ services:
       - "6379"
     volumes:
       - ./redis/default.conf:/usr/local/etc/redis/redis.conf
-    command: [
-      "sh", "-c",
-      '
-       docker-entrypoint.sh
-       --requirepass "12sjb12"
-      '
-    ]
     ports:
-    - 6379:6379
-
+      - ${REDIS_PORT}:6379
+    env_file:
+      - .env
     ## --------------------------------------------
     ## | 5 : PhpMyAdmin
     ## --------------------------------------------
@@ -79,6 +75,7 @@ services:
     volumes:
       - /sessions
     ports:
-    - 8006:80
-
+      - ${PHP_MY_ADMIN_PORT}:80
+    env_file:
+      - .env
 
