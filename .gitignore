@@ -1,5 +1,5 @@
 .idea
-./.env
+.env
 ./src/
 ./host-vol-share/
 ./docker/mysql
